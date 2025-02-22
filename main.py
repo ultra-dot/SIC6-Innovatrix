@@ -2,20 +2,10 @@ from machine import Pin, I2C
 import ujson
 import network
 import ssd1306
-import urequests  # Gunakan urequests, bukan requests
+import urequests
 from time import sleep
 from dht import DHT11
-
-# Konfigurasi WiFi dan Ubidots
-DEVICE_ID = "esp32"
-WIFI_SSID = "AB"
-WIFI_PASSWORD = "alifbaha"
-TOKEN = "BBUS-rgoQlc7iA8Wvipx54JMvBx4pfV7bRw"
-UBIDOTS_URL = f"http://industrial.api.ubidots.com/api/v1.6/devices/{DEVICE_ID}"
-HEADERS = {
-    "Content-Type": "application/json",
-    "X-Auth-Token": TOKEN
-}
+import config
 
 # Inisialisasi sensor DHT11 dan LED
 DHT_PIN = Pin(4)
@@ -29,7 +19,7 @@ oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 def connect_wifi():
     wifi = network.WLAN(network.STA_IF)
     wifi.active(True)
-    wifi.connect(WIFI_SSID, WIFI_PASSWORD)
+    wifi.connect(config.WIFI_SSID, config.WIFI_PASSWORD)  # Edit di config.py
     print("Connecting to WiFi...")
     while not wifi.isconnected():
         sleep(0.5)
@@ -39,7 +29,7 @@ def connect_wifi():
 def send_data(temp, humidity):
     data = ujson.dumps({"temp": temp, "humidity": humidity})
     try:
-        response = urequests.post(UBIDOTS_URL, headers=HEADERS, data=data)
+        response = urequests.post(config.UBIDOTS_URL, headers=config.HEADERS, data=data)  # Edit di config.py
         print("Data Sent! Response:", response.text)
         response.close()
     except Exception as e:
@@ -83,3 +73,5 @@ while True:
         print("Error reading sensor:", e)
     
     sleep(5)
+
+
