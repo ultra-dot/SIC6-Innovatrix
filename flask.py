@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 
 # Konfigurasi MongoDB
-uri = "mongodb+srv://yoalsb:5CWuaFUUPnD34BMv@innovatrix.uh6xi.mongodb.net/?retryWrites=true&w=majority&appName=Innovatrix"
+uri = "<token mongodb>"
 client = MongoClient(uri, server_api=ServerApi('1'))
-db = client["innoDB"]
+db = client["<db_id>"]
 collection = db["sensor_data"]
 
 # Fungsi untuk menghitung rata-rata
