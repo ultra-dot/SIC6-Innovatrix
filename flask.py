@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
-from bson import ObjectId 
-from datetime import datetime
+from bson import ObjectId
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -18,7 +18,7 @@ def calculate_avg(field):
     values = [item[field] for item in data if field in item]
     return sum(values) / len(values) if values else 0
 
-@app.route("/sensor1/temperature/avg", methods=["GET"])
+@app.route("/sensor1/suhu/avg", methods=["GET"])
 def get_avg_temperature():
     avg_temp = calculate_avg("temperature")
     return jsonify({"average_temperature": avg_temp})
@@ -38,8 +38,10 @@ def receive_sensor_data():
     try:
         data = request.json
         if data:
-            data["timestamp"] = datetime.utcnow()  # Tambahkan timestamp UTC
-            collection.insert_one(data)
+            #Timestamp format WIB (UTC+7)
+            data["timestamp"] = (datetime.utcnow() + timedelta(hours=7)).isoformat()
+            result = collection.insert_one(data)
+            data["_id"] = str(result.inserted_id)  # Konversi _id ke string
             return jsonify({"message": "Data berhasil disimpan", "data": data}), 201
         else:
             return jsonify({"error": "Data kosong"}), 400
@@ -51,8 +53,8 @@ def get_all_sensor_data():
     try:
         data = list(collection.find())  
         for item in data:
-            item["_id"] = str(item["_id"])  # Konversi ObjectId ke string
-            item["timestamp"] = item["timestamp"].isoformat() if "timestamp" in item else None  # Format timestamp
+            item["_id"] = str(item["_id"])  #Konversi ObjectId ke string
+            item["timestamp"] = item.get("timestamp", None)  #Timestamp WIB
         return jsonify(data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
