@@ -13,6 +13,9 @@ Proyek ini menggunakan **ESP32** untuk membaca motion dari **sensor PIR** serta 
 - ✅ Menyalakan LED merah jika terdeteksi gerakan di **PIR**.
 - ✅ API Flask untuk mengambil dan menganalisis data sensor.
 
+![Rangkaian ESP32-DHT11-PIR](https://github.com/user-attachments/assets/e1e268e6-d496-4aa8-952e-1fc68b0dacd8)
+![Dashboard Ubidots UNI249-Innovatrix SIC BATCH 6](https://github.com/user-attachments/assets/a49c1786-df16-4eeb-8ddf-caaf5b3d9980)
+
 ---
 
 ## 🛂 **Persyaratan**
