@@ -18,6 +18,9 @@ PIR_PIN = Pin(5, Pin.IN)
 i2c = I2C(0, scl=Pin(22), sda=Pin(21))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
+# Inisialisasi LED
+LED_MOTION = Pin(18, Pin.OUT)
+
 def connect_wifi():
     wifi = network.WLAN(network.STA_IF)
     wifi.active(True)
@@ -32,9 +35,9 @@ def send_data(temp, humidity, motion):
     """Mengirim data ke Ubidots"""
     data = ujson.dumps({"temp": temp, "humidity": humidity, "motion": motion})
     try:
-        print("[DEBUG] Mengirim data ke server...")
+        print("Mengirim data ke server...")
         response = urequests.post(config.UBIDOTS_URL, headers=config.HEADERS, data=data)
-        print("[DEBUG] Response:", response.text)
+        print("Response:", response.text)
         response.close()
     except Exception as e:
         print("[ERROR] Gagal mengirim data:", e)
@@ -67,14 +70,21 @@ counter = 0
 while True:
     try:
         counter += 1
-        print("[DEBUG] Iterasi ke-", counter)
+        print("Data ke-", counter)
 
         dht_sensor.measure()
         suhu = dht_sensor.temperature()
         kelembapan = dht_sensor.humidity()
         motion_detected = PIR_PIN.value()
+        
+        if motion_detected:
+            LED_MOTION.value(1)
+            
+        else:
+            LED_MOTION.value(0)
 
-        print("[DEBUG] Suhu: {}°C, Kelembapan: {}%, Gerakan: {}".format(
+
+        print("Suhu: {}°C, Kelembapan: {}%, Gerakan: {}".format(
             suhu, kelembapan, "Yes" if motion_detected else "No"))
 
         display_oled(suhu, kelembapan, motion_detected)
@@ -83,6 +93,7 @@ while True:
 
     except Exception as e:
         print("[ERROR] Terjadi kesalahan:", e)
-
-    sleep(0.5)  # Delay 2 detik agar lebih jelas di log
-
+    
+    
+    # Delay 2 detik agar lebih jelas di log
+    sleep(1)
