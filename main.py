@@ -5,20 +5,20 @@ import ssd1306
 import urequests
 from time import sleep
 from dht import DHT11
-import config  # Import konfigurasi dari config.py
+import config  #Import setting dari config.py
 
-# Inisialisasi sensor DHT11
+#Inisialisasi sensor DHT11
 DHT_PIN = Pin(4)
 dht_sensor = DHT11(DHT_PIN)
 
-# Inisialisasi sensor PIR
+#Inisialisasi sensor PIR
 PIR_PIN = Pin(5, Pin.IN)
 
-# Inisialisasi OLED
+#Inisialisasi OLED
 i2c = I2C(0, scl=Pin(22), sda=Pin(21))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
-# Inisialisasi LED
+#Inisialisasi LED
 LED_MOTION = Pin(18, Pin.OUT)
 
 def connect_wifi():
@@ -50,7 +50,7 @@ def display_oled(temp, humidity, motion):
     oled.text("Gerakan: {}".format("Yes" if motion else "No"), 10, 50)
     oled.show()
 
-# Mulai program
+#Mulai program
 connect_wifi()
 
 oled.fill(0)
@@ -64,7 +64,6 @@ oled.text("Mendeteksi...", 8, 26)
 oled.show()
 sleep(2)
 
-# Debugging: Pastikan loop berjalan terus
 counter = 0
 
 while True:
@@ -95,5 +94,5 @@ while True:
         print("[ERROR] Terjadi kesalahan:", e)
     
     
-    # Delay 2 detik agar lebih jelas di log
+    #Delay agar lebih jelas di log
     sleep(1)
