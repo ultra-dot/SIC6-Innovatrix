@@ -9,7 +9,7 @@ Proyek ini menggunakan **ESP32** untuk membaca suhu dan kelembapan dari **sensor
 - ✅ Membaca data suhu & kelembapan dari **DHT11**.
 - ✅ Menampilkan data di **OLED SSD1306**.
 - ✅ Mengirim data ke **Ubidots**.
-- ✅ Menyalakan LED merah jika suhu > 31°C.
+- ✅ Menyalakan LED merah jika terdeteksi gerakan di **PIR**
 
 ---
 
@@ -20,6 +20,7 @@ Proyek ini menggunakan **ESP32** untuk membaca suhu dan kelembapan dari **sensor
 - Layar OLED SSD1306 (I2C)
 - LED merah & resistor
 - Kabel jumper
+- Sensor PIR
 
 ### 📜 **Library yang Digunakan**
 - `machine` → Mengontrol pin ESP32
